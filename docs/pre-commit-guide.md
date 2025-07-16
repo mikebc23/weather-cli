@@ -7,11 +7,13 @@ This document explains the pre-commit configuration for the weather-cli project 
 Pre-commit is configured to run automatically before each git commit to ensure code quality and consistency. The configuration includes:
 
 ### Code Formatting
+
 - **Black**: Opinionated Python code formatter
 - **isort**: Import statement organizer
 - **Prettier**: YAML file formatter
 
 ### Code Quality & Linting
+
 - **flake8**: Python linting with extensions:
   - `flake8-docstrings`: Docstring conventions
   - `flake8-import-order`: Import order checking
@@ -20,16 +22,20 @@ Pre-commit is configured to run automatically before each git commit to ensure c
 - **pyupgrade**: Upgrades Python syntax for newer versions
 
 ### Type Checking
+
 - **mypy**: Static type checker for Python
 
 ### Security
+
 - **bandit**: Security vulnerability scanner
 
 ### Documentation
+
 - **pydocstyle**: Docstring style checker (Google convention)
 - **markdownlint**: Markdown file linter
 
 ### File Maintenance
+
 - Trailing whitespace removal
 - End-of-file fixing
 - Large file checking
@@ -39,6 +45,7 @@ Pre-commit is configured to run automatically before each git commit to ensure c
 ## Setup
 
 ### Initial Setup
+
 ```bash
 # Install pre-commit and development dependencies
 pip install -r requirements-dev.txt
@@ -51,6 +58,7 @@ pre-commit install
 ```
 
 ### Manual Installation
+
 ```bash
 pip install pre-commit
 pre-commit install
@@ -59,12 +67,15 @@ pre-commit install
 ## Usage
 
 ### Automatic Usage
+
 Pre-commit hooks run automatically on `git commit`. If any hook fails:
+
 1. The commit is blocked
 2. Issues are automatically fixed where possible
 3. You need to stage the fixes and commit again
 
 ### Manual Usage
+
 ```bash
 # Run all hooks on all files
 pre-commit run --all-files
@@ -84,10 +95,13 @@ git commit --no-verify
 ## Configuration Files
 
 ### `.pre-commit-config.yaml`
+
 Main configuration file defining all hooks and their settings.
 
 ### `pyproject.toml`
+
 Contains tool-specific configurations:
+
 - Black formatting options
 - isort import organization
 - mypy type checking settings
@@ -95,42 +109,50 @@ Contains tool-specific configurations:
 - pytest and coverage settings
 
 ### `.markdownlint.yaml`
+
 Markdown linting rules configuration.
 
 ## Tool-Specific Information
 
 ### Black
+
 - Line length: 88 characters
 - Target Python version: 3.8+
 - Automatically formats code on commit
 
 ### isort
+
 - Profile: black (compatible with Black)
 - Sorts imports by: standard library, third-party, local
 - Groups imports with trailing commas
 
 ### flake8
+
 - Max line length: 88 (Black compatible)
 - Max complexity: 10
 - Ignores: E203, W503, E501 (Black compatibility)
 
 ### mypy
+
 - Configured for gradual typing adoption
 - Initially lenient, can be made stricter over time
 - Ignores missing imports for third-party libraries
 
 ### bandit
+
 - Scans for security vulnerabilities
 - Excludes test files
 - Custom configuration for acceptable patterns
 
 ### pydocstyle
+
 - Google docstring convention
 - Some rules disabled for gradual adoption
 
 ## Common Issues and Solutions
 
 ### Type Errors
+
 ```bash
 # For Python 3.8 compatibility, use typing imports
 from typing import List, Dict, Tuple
@@ -138,26 +160,31 @@ from typing import List, Dict, Tuple
 ```
 
 ### Import Order
+
 isort will automatically fix import order issues.
 
 ### Line Length
+
 Black automatically handles line length, but some cases may need manual adjustment.
 
 ### Docstring Issues
+
 Follow Google docstring convention:
+
 ```python
 def function(param: str) -> str:
     """Brief description.
-    
+
     Args:
         param: Description of parameter.
-        
+
     Returns:
         Description of return value.
     """
 ```
 
 ### Security Issues
+
 - Use `# nosec` comment for false positives
 - Address real security issues promptly
 
@@ -174,6 +201,7 @@ pre-commit autoupdate --repo https://github.com/psf/black
 ## Disabling Hooks
 
 To temporarily disable a hook, edit `.pre-commit-config.yaml` and add:
+
 ```yaml
 - repo: local
   hooks:
@@ -184,6 +212,7 @@ To temporarily disable a hook, edit `.pre-commit-config.yaml` and add:
 ```
 
 Or use `SKIP` environment variable:
+
 ```bash
 SKIP=mypy git commit -m "Skip mypy for this commit"
 ```
@@ -191,7 +220,9 @@ SKIP=mypy git commit -m "Skip mypy for this commit"
 ## IDE Integration
 
 ### VS Code
+
 Install these extensions for better integration:
+
 - Python
 - Black Formatter
 - isort
@@ -199,7 +230,9 @@ Install these extensions for better integration:
 - markdownlint
 
 ### PyCharm
+
 Enable these features:
+
 - Code reformatting with Black
 - Import optimization with isort
 - Type checking with mypy
@@ -217,6 +250,7 @@ The configuration is initially lenient to allow gradual adoption. You can make i
 ## Troubleshooting
 
 ### Pre-commit not running
+
 ```bash
 # Reinstall hooks
 pre-commit uninstall
@@ -224,6 +258,7 @@ pre-commit install
 ```
 
 ### Hook failures
+
 ```bash
 # See detailed output
 pre-commit run --verbose --all-files
@@ -233,6 +268,7 @@ pre-commit run --verbose flake8
 ```
 
 ### Performance issues
+
 ```bash
 # Run hooks in parallel (default)
 pre-commit run --show-diff-on-failure

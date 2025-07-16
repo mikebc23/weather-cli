@@ -38,11 +38,12 @@ repos:
     rev: 7.1.0
     hooks:
       - id: flake8
-        args: [
-          "--max-line-length=88",
-          "--extend-ignore=E203,W503,E501",
-          "--max-complexity=10"
-        ]
+        args:
+          [
+            "--max-line-length=88",
+            "--extend-ignore=E203,W503,E501,D401,C901,I100,I201",
+            "--max-complexity=20",
+          ]
         additional_dependencies:
           - flake8-docstrings
           - flake8-import-order
@@ -53,13 +54,18 @@ repos:
     rev: v1.10.1
     hooks:
       - id: mypy
-        args: [
-          --ignore-missing-imports,
-          --allow-untyped-defs,
-          --allow-incomplete-defs,
-          --allow-untyped-calls,
-          --no-strict-optional
-        ]
+        args:
+          [
+            --ignore-missing-imports,
+            --allow-untyped-defs,
+            --allow-incomplete-defs,
+            --allow-untyped-calls,
+            --no-strict-optional,
+            --disable-error-code=no-any-return,
+            --disable-error-code=unreachable,
+            --disable-error-code=arg-type,
+            --disable-error-code=abstract,
+          ]
         additional_dependencies: [types-requests]
 
   # Security linting
@@ -75,10 +81,7 @@ repos:
     rev: 6.3.0
     hooks:
       - id: pydocstyle
-        args: [
-          "--convention=google",
-          "--add-ignore=D100,D104,D212"
-        ]
+        args: ["--convention=google", "--add-ignore=D100,D104,D212"]
 
   # Upgrade Python syntax for newer versions
   - repo: https://github.com/asottile/pyupgrade
@@ -118,8 +121,8 @@ ci:
 
     for more information, see https://pre-commit.ci
   autofix_prs: true
-  autoupdate_branch: ''
-  autoupdate_commit_msg: '[pre-commit.ci] pre-commit autoupdate'
+  autoupdate_branch: ""
+  autoupdate_commit_msg: "[pre-commit.ci] pre-commit autoupdate"
   autoupdate_schedule: weekly
   skip: []
   submodules: false

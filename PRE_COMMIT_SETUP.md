@@ -3,15 +3,17 @@
 ## ✅ What's Been Set Up
 
 ### 1. Pre-commit Configuration (`.pre-commit-config.yaml`)
+
 - **Code Formatting**: Black, isort, Prettier
 - **Linting**: flake8 with extensions (docstrings, imports, bugbear)
 - **Type Checking**: mypy (initially lenient)
-- **Security**: bandit security scanner  
+- **Security**: bandit security scanner
 - **Documentation**: pydocstyle, markdownlint
 - **Maintenance**: trailing whitespace, end-of-file fixes, large file checks
 - **Modernization**: pyupgrade, autoflake
 
 ### 2. Configuration Files Created
+
 - `pyproject.toml` - Modern Python project configuration
 - `requirements-dev.txt` - Development dependencies
 - `.markdownlint.yaml` - Markdown linting rules
@@ -19,14 +21,16 @@
 - `docs/pre-commit-guide.md` - Comprehensive documentation
 
 ### 3. Pre-commit Hooks Installed
+
 - Hooks are now active and will run on every `git commit`
 - Can be run manually with `pre-commit run --all-files`
 
 ## 🔧 Available Linters and Tools
 
 ### Code Quality
+
 1. **Black** - Automatic code formatting (88 char line length)
-2. **isort** - Import sorting and organization  
+2. **isort** - Import sorting and organization
 3. **flake8** - Python linting with extensions:
    - Docstring conventions
    - Import order checking
@@ -35,22 +39,27 @@
 5. **pyupgrade** - Modernizes Python syntax
 
 ### Type Safety
+
 6. **mypy** - Static type checking (configured to be initially lenient)
 
 ### Security
+
 7. **bandit** - Security vulnerability scanning
 
 ### Documentation
+
 8. **pydocstyle** - Docstring style enforcement (Google convention)
 9. **markdownlint** - Markdown file linting
 
 ### File Maintenance
+
 10. **pre-commit-hooks** - Basic file maintenance (whitespace, EOF, etc.)
 11. **prettier** - YAML file formatting
 
 ## 🚀 How to Use
 
 ### Quick Start
+
 ```bash
 # Run the setup script
 ./setup-dev.sh
@@ -61,6 +70,7 @@ pre-commit install
 ```
 
 ### Daily Usage
+
 ```bash
 # Hooks run automatically on commit
 git add .
@@ -71,7 +81,7 @@ pre-commit run --all-files
 
 # Run specific tools
 pre-commit run black      # Format code
-pre-commit run flake8     # Lint code  
+pre-commit run flake8     # Lint code
 pre-commit run mypy       # Type check
 pre-commit run bandit     # Security scan
 ```
@@ -81,6 +91,7 @@ pre-commit run bandit     # Security scan
 The configuration is designed for gradual adoption:
 
 ### Phase 1 (Current) - Lenient
+
 - Automatic formatting (Black, isort)
 - Basic linting (flake8 with relaxed rules)
 - Security scanning (bandit)
@@ -88,11 +99,13 @@ The configuration is designed for gradual adoption:
 - Relaxed docstring requirements
 
 ### Phase 2 - Moderate (Future)
+
 - Stricter flake8 complexity limits
 - More mypy type checking requirements
 - Additional pydocstyle rules
 
 ### Phase 3 - Strict (Future)
+
 - Full mypy strict mode
 - Complete docstring coverage
 - Maximum code quality standards
@@ -100,26 +113,31 @@ The configuration is designed for gradual adoption:
 ## 🔧 Key Configuration Highlights
 
 ### Black Formatting
+
 - Line length: 88 characters
 - Python 3.8+ target
 - Compatible with flake8
 
 ### Type Checking (mypy)
+
 - Initially allows untyped code
 - Ignores missing imports
 - Gradual adoption friendly
 
 ### Security (bandit)
+
 - Scans for security issues
 - Fixed MD5 usage issue (now marked as non-security)
 - Excludes test files
 
 ### Import Organization (isort)
+
 - Black-compatible profile
 - Groups: stdlib, third-party, local
 - Trailing comma style
 
 ## 📁 File Structure Added
+
 ```
 weather-cli/
 ├── .pre-commit-config.yaml     # Pre-commit configuration
@@ -142,17 +160,20 @@ weather-cli/
 ## 🔍 Issues Found & Status
 
 ### ✅ Fixed
+
 - MD5 security issue (added `# nosec` comment)
 - Trailing whitespace and end-of-file issues
 - Import organization
 
 ### 🔄 Ongoing (Will be fixed gradually)
+
 - Some type annotations missing (mypy errors)
 - Docstring formatting (pydocstyle)
 - Code complexity in main function
 - Some import order issues
 
 ### 📋 Recommended Priority
+
 1. Fix import order issues (easy, automatic)
 2. Add missing type annotations (moderate effort)
 3. Improve docstring formatting (low priority)

@@ -22,7 +22,7 @@ class Coordinates:
         """Validate coordinates after initialization."""
         self._validate()
 
-    def _validate(self):
+    def _validate(self) -> None:
         """Validate latitude and longitude ranges."""
         if not (-90 <= self.lat <= 90):
             raise LocationError(
@@ -35,7 +35,7 @@ class Coordinates:
             )
 
     def normalize_for_cache(self) -> str:
-        """Create a normalized string for cache keys."""
+        """Create normalized string for cache keys."""
         return f"{self.lat:.4f},{self.lon:.4f}"
 
     def __str__(self) -> str:
@@ -57,8 +57,7 @@ class LocationResolver:
         )
 
     def resolve(self, input_str: Optional[str] = None) -> Coordinates:
-        """
-        Main entry point - detects type and resolves to coordinates.
+        """Detect type and resolve to coordinates.
 
         Args:
             input_str: Location input (None for auto-detection)
