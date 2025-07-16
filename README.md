@@ -38,8 +38,8 @@ weather "San José, Costa Rica"
 weather "Tokyo"
 
 # Coordinates
-weather "40.7128,-74.0060"        # NYC
-weather "9.9281,-84.0907"         # San José, CR
+weather "40.7128,-74.0060"           # NYC
+weather "9.9281,-84.0907"            # San José, CR
 weather --lat=51.5074 --lon=-0.1278  # London
 
 # Different output formats
@@ -166,37 +166,37 @@ The tool uses a configuration file at `~/.weather.conf` (JSON format):
 
 ```text
 weather-cli/
-├── weather/                    # Main package
-│   ├── main.py                # CLI entry point
-│   ├── config.py              # Configuration management
-│   ├── cache.py               # Caching system
-│   ├── location.py            # Location services (geocoding)
-│   ├── sources/               # Weather data sources
-│   │   ├── base.py           # Abstract base class
-│   │   ├── open_meteo.py     # Open-Meteo API ✅
-│   │   ├── wttr.py           # wttr.in service 🚧
-│   │   └── nws.py            # National Weather Service 🚧
-│   ├── formatters/           # Output formatters
+├── weather/                 # Main package
+│   ├── main.py              # CLI entry point
+│   ├── config.py            # Configuration management
+│   ├── cache.py             # Caching system
+│   ├── location.py          # Location services (geocoding)
+│   ├── sources/             # Weather data sources
+│   │   ├── base.py          # Abstract base class
+│   │   ├── open_meteo.py    # Open-Meteo API
+│   │   ├── wttr.py          # wttr.in service
+│   │   └── nws.py           # National Weather Service
+│   ├── formatters/          # Output formatters
 │   │   ├── base.py          # Abstract formatter
-│   │   ├── minimal.py       # Minimal text output ✅
-│   │   ├── table.py         # Table format ✅
-│   │   ├── ascii.py         # ASCII art format ✅
-│   │   └── raw.py           # Raw JSON output ✅
+│   │   ├── minimal.py       # Minimal text output
+│   │   ├── table.py         # Table format
+│   │   ├── ascii.py         # ASCII art format
+│   │   └── raw.py           # Raw JSON output
 │   └── utils/               # Utility functions
 │       ├── http.py          # HTTP client wrapper
 │       ├── units.py         # Unit conversions
 │       └── exceptions.py    # Custom exceptions
 ├── tests/                   # Test suite
-│   ├── conftest.py         # pytest fixtures
-│   └── test_location.py    # Location tests ✅
-├── setup.py                # Package setup
-├── requirements.txt        # Dependencies
-└── README.md              # This file
+│   ├── conftest.py          # pytest fixtures
+│   └── test_location.py     # Location tests
+├── setup.py                 # Package setup
+├── requirements.txt         # Dependencies
+└── README.md                # This file
 ```
 
 ## Data Sources
 
-### Open-Meteo (Primary) ✅
+### Open-Meteo (Primary)
 
 - **Status**: Implemented and working
 - **Coverage**: Global
@@ -204,14 +204,14 @@ weather-cli/
 - **Rate limit**: Generous free tier
 - **URL**: https://open-meteo.com/
 
-### wttr.in (Planned) 🚧
+### wttr.in (Planned)
 
 - **Status**: Placeholder implemented
 - **Coverage**: Global
 - **Features**: Simple curl-based service, ASCII art built-in
 - **Rate limit**: Fair use
 
-### National Weather Service (Planned) 🚧
+### National Weather Service (Planned)
 
 - **Status**: Placeholder implemented
 - **Coverage**: United States only
@@ -244,7 +244,7 @@ pytest tests/test_location.py -v
 
 ```bash
 # Different locations
-weather                                    # Auto-detect
+weather                                   # Auto-detect
 weather "Paris, France"                   # City name
 weather "90210"                           # ZIP code
 weather "35.6762,139.6503"                # Tokyo coordinates
