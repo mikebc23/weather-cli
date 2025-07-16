@@ -1,9 +1,8 @@
 """Location detection and geocoding services."""
 
 import re
-import json
 import requests
-from typing import Optional, Tuple, Dict, Any
+from typing import Optional
 from dataclasses import dataclass
 
 from .utils.exceptions import LocationError
@@ -215,7 +214,7 @@ class LocationResolver:
             # Use OpenStreetMap Nominatim for ZIP code geocoding
             url = "https://nominatim.openstreetmap.org/search"
             params = {
-                'q': zipcode,
+                'postalcode': zipcode,
                 'country': 'US',
                 'format': 'json',
                 'limit': 1,
@@ -344,7 +343,7 @@ class LocationResolver:
         except requests.RequestException as e:
             raise LocationError(f"Failed to detect current location: {e}") from e
         except (KeyError, ValueError) as e:
-            raise LocationError(f"Invalid IP geolocation response") from e
+            raise LocationError("Invalid IP geolocation response") from e
 
 
 # Utility functions for external use
