@@ -1,13 +1,14 @@
 """Test configuration for pytest."""
 
-import pytest
-from pathlib import Path
-import tempfile
 import shutil
+import tempfile
+from pathlib import Path
 
-from weather.config import WeatherConfig
+import pytest
+
 from weather.cache import WeatherCache
-from weather.location import LocationResolver, Coordinates
+from weather.config import WeatherConfig
+from weather.location import Coordinates, LocationResolver
 
 
 @pytest.fixture
@@ -43,9 +44,4 @@ def test_location_resolver():
 @pytest.fixture
 def sample_coordinates():
     """Sample coordinates for testing."""
-    return Coordinates(
-        lat=40.7128,
-        lon=-74.0060,
-        name="New York, NY",
-        country="US"
-    )
+    return Coordinates(lat=40.7128, lon=-74.0060, name="New York, NY", country="US")

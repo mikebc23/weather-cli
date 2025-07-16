@@ -1,14 +1,16 @@
 """Unit conversion utilities for weather data."""
 
+from typing import Tuple
+
 
 def celsius_to_fahrenheit(celsius: float) -> float:
     """Convert Celsius to Fahrenheit."""
-    return (celsius * 9/5) + 32
+    return (celsius * 9 / 5) + 32
 
 
 def fahrenheit_to_celsius(fahrenheit: float) -> float:
     """Convert Fahrenheit to Celsius."""
-    return (fahrenheit - 32) * 5/9
+    return (fahrenheit - 32) * 5 / 9
 
 
 def kmh_to_mph(kmh: float) -> float:
@@ -53,26 +55,26 @@ def ft_to_m(feet: float) -> float:
 
 class UnitConverter:
     """Handles unit conversions for weather data."""
-    
+
     def __init__(self, units: str = "metric"):
         """
         Initialize converter with unit system.
-        
+
         Args:
             units: 'metric' or 'imperial'
         """
         self.units = units.lower()
-        if self.units not in ['metric', 'imperial']:
+        if self.units not in ["metric", "imperial"]:
             raise ValueError(f"Invalid units: {units}. Must be 'metric' or 'imperial'")
-    
-    def temperature(self, value: float, from_celsius: bool = True) -> tuple[float, str]:
+
+    def temperature(self, value: float, from_celsius: bool = True) -> Tuple[float, str]:
         """
         Convert temperature to target units.
-        
+
         Args:
             value: Temperature value
             from_celsius: True if input is Celsius, False if Fahrenheit
-            
+
         Returns:
             Tuple of (converted_value, unit_symbol)
         """
@@ -86,15 +88,15 @@ class UnitConverter:
                 return celsius_to_fahrenheit(value), "°F"
             else:
                 return value, "°F"
-    
-    def wind_speed(self, value: float, from_kmh: bool = True) -> tuple[float, str]:
+
+    def wind_speed(self, value: float, from_kmh: bool = True) -> Tuple[float, str]:
         """
         Convert wind speed to target units.
-        
+
         Args:
             value: Wind speed value
             from_kmh: True if input is km/h, False if mph
-            
+
         Returns:
             Tuple of (converted_value, unit_symbol)
         """
@@ -108,15 +110,15 @@ class UnitConverter:
                 return kmh_to_mph(value), "mph"
             else:
                 return value, "mph"
-    
-    def pressure(self, value: float, from_hpa: bool = True) -> tuple[float, str]:
+
+    def pressure(self, value: float, from_hpa: bool = True) -> Tuple[float, str]:
         """
         Convert pressure to target units.
-        
+
         Args:
             value: Pressure value
             from_hpa: True if input is hPa, False if inHg
-            
+
         Returns:
             Tuple of (converted_value, unit_symbol)
         """
@@ -130,15 +132,15 @@ class UnitConverter:
                 return hpa_to_inhg(value), "inHg"
             else:
                 return value, "inHg"
-    
-    def precipitation(self, value: float, from_mm: bool = True) -> tuple[float, str]:
+
+    def precipitation(self, value: float, from_mm: bool = True) -> Tuple[float, str]:
         """
         Convert precipitation to target units.
-        
+
         Args:
             value: Precipitation value
             from_mm: True if input is mm, False if inches
-            
+
         Returns:
             Tuple of (converted_value, unit_symbol)
         """
@@ -152,15 +154,15 @@ class UnitConverter:
                 return mm_to_inch(value), "in"
             else:
                 return value, "in"
-    
-    def visibility(self, value: float, from_meters: bool = True) -> tuple[float, str]:
+
+    def visibility(self, value: float, from_meters: bool = True) -> Tuple[float, str]:
         """
         Convert visibility to target units.
-        
+
         Args:
             value: Visibility value
             from_meters: True if input is meters, False if feet
-            
+
         Returns:
             Tuple of (converted_value, unit_symbol)
         """

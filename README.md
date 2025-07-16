@@ -34,7 +34,7 @@ weather
 
 # City names
 weather "New York"
-weather "San José, Costa Rica" 
+weather "San José, Costa Rica"
 weather "Tokyo"
 
 # Coordinates
@@ -51,19 +51,22 @@ weather "NYC" --format=raw        # JSON output
 ## Output Formats
 
 ### Minimal (default)
-```
+
+```text
 San José, CR: 22°C, Partly Cloudy
 Feels like: 25°C | Humidity: 65% | Wind: 8 km/h
 ```
 
 ### Table
-```
+
+```text
 Location    | Temp  | Condition    | Feels | Humidity | Wind
 San José CR | 22°C  | Partly Cloudy| 25°C  | 65%      | 8 km/h
 ```
 
 ### ASCII Art
-```
+
+```text
 San José, CR
      \   /     22°C
       .-.      Partly Cloudy
@@ -73,6 +76,7 @@ San José, CR
 ```
 
 ### Raw JSON
+
 ```json
 {
   "location": {
@@ -104,7 +108,7 @@ San José, CR
 
 ## Command Line Options
 
-```
+```text
 weather [location] [options]
 
 Positional Arguments:
@@ -140,7 +144,7 @@ The tool uses a configuration file at `~/.weather.conf` (JSON format):
 ```json
 {
   "units": "metric",
-  "format": "minimal", 
+  "format": "minimal",
   "source": "open-meteo",
   "cache_duration": 300,
   "timeout": 10
@@ -160,7 +164,7 @@ The tool uses a configuration file at `~/.weather.conf` (JSON format):
 
 ## Project Structure
 
-```
+```text
 weather-cli/
 ├── weather/                    # Main package
 │   ├── main.py                # CLI entry point
@@ -193,6 +197,7 @@ weather-cli/
 ## Data Sources
 
 ### Open-Meteo (Primary) ✅
+
 - **Status**: Implemented and working
 - **Coverage**: Global
 - **Features**: Current weather, forecasts, no API key required
@@ -200,12 +205,14 @@ weather-cli/
 - **URL**: https://open-meteo.com/
 
 ### wttr.in (Planned) 🚧
+
 - **Status**: Placeholder implemented
-- **Coverage**: Global  
+- **Coverage**: Global
 - **Features**: Simple curl-based service, ASCII art built-in
 - **Rate limit**: Fair use
 
 ### National Weather Service (Planned) 🚧
+
 - **Status**: Placeholder implemented
 - **Coverage**: United States only
 - **Features**: Official US government weather data
@@ -217,6 +224,7 @@ weather-cli/
 - `urllib3>=1.26.0` - HTTP client utilities
 
 Development dependencies:
+
 - `pytest` - Testing framework
 
 ## Testing
@@ -237,7 +245,7 @@ pytest tests/test_location.py -v
 ```bash
 # Different locations
 weather                                    # Auto-detect
-weather "Paris, France"                   # City name  
+weather "Paris, France"                   # City name
 weather "90210"                           # ZIP code
 weather "35.6762,139.6503"                # Tokyo coordinates
 
