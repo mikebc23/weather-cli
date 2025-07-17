@@ -47,7 +47,9 @@ class WeatherConfig:
                     if key in self.DEFAULT_CONFIG:
                         self.config[key] = value
                     else:
-                        print(f"Warning: Unknown config option '{key}' ignored")
+                        print(
+                            f"Warning: Unknown config option '{key}' ignored"
+                        )
 
                 # Validate configuration values
                 self._validate_config()
@@ -107,21 +109,26 @@ class WeatherConfig:
         # Validate units
         if self.config["units"] not in ["metric", "imperial"]:
             raise ConfigError(
-                f"Invalid units: {self.config['units']}. Must be 'metric' or 'imperial'"
+                "Invalid units: {}. Must be 'metric' or 'imperial'".format(
+                    self.config['units']
+                )
             )
 
         # Validate format
         valid_formats = ["simple", "visual", "raw"]
         if self.config["format"] not in valid_formats:
             raise ConfigError(
-                f"Invalid format: {self.config['format']}. Must be one of {valid_formats}"
+                "Invalid format: {}. Must be one of {}".format(
+                    self.config['format'], valid_formats
+                )
             )
 
         # Validate source
         valid_sources = ["open-meteo", "wttr", "nws"]
         if self.config["source"] not in valid_sources:
             raise ConfigError(
-                f"Invalid source: {self.config['source']}. Must be one of {valid_sources}"
+                f"Invalid source: {self.config['source']}. "
+                f"Must be one of {valid_sources}"
             )
 
         # Validate numeric values
@@ -131,10 +138,16 @@ class WeatherConfig:
         ):
             raise ConfigError("cache_duration must be a non-negative integer")
 
-        if not isinstance(self.config["timeout"], int) or self.config["timeout"] <= 0:
+        if (
+            not isinstance(self.config["timeout"], int)
+            or self.config["timeout"] <= 0
+        ):
             raise ConfigError("timeout must be a positive integer")
 
-        if not isinstance(self.config["retries"], int) or self.config["retries"] < 0:
+        if (
+            not isinstance(self.config["retries"], int)
+            or self.config["retries"] < 0
+        ):
             raise ConfigError("retries must be a non-negative integer")
 
     def get_all(self) -> Dict[str, Any]:

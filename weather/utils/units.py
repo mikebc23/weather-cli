@@ -65,9 +65,13 @@ class UnitConverter:
         """
         self.units = units.lower()
         if self.units not in ["metric", "imperial"]:
-            raise ValueError(f"Invalid units: {units}. Must be 'metric' or 'imperial'")
+            raise ValueError(
+                f"Invalid units: {units}. Must be 'metric' or 'imperial'"
+            )
 
-    def temperature(self, value: float, from_celsius: bool = True) -> Tuple[float, str]:
+    def temperature(
+        self, value: float, from_celsius: bool = True
+    ) -> Tuple[float, str]:
         """
         Convert temperature to target units.
 
@@ -89,7 +93,9 @@ class UnitConverter:
             else:
                 return value, "°F"
 
-    def wind_speed(self, value: float, from_kmh: bool = True) -> Tuple[float, str]:
+    def wind_speed(
+        self, value: float, from_kmh: bool = True
+    ) -> Tuple[float, str]:
         """
         Convert wind speed to target units.
 
@@ -111,7 +117,9 @@ class UnitConverter:
             else:
                 return value, "mph"
 
-    def pressure(self, value: float, from_hpa: bool = True) -> Tuple[float, str]:
+    def pressure(
+        self, value: float, from_hpa: bool = True
+    ) -> Tuple[float, str]:
         """
         Convert pressure to target units.
 
@@ -133,7 +141,9 @@ class UnitConverter:
             else:
                 return value, "inHg"
 
-    def precipitation(self, value: float, from_mm: bool = True) -> Tuple[float, str]:
+    def precipitation(
+        self, value: float, from_mm: bool = True
+    ) -> Tuple[float, str]:
         """
         Convert precipitation to target units.
 
@@ -155,7 +165,9 @@ class UnitConverter:
             else:
                 return value, "in"
 
-    def visibility(self, value: float, from_meters: bool = True) -> Tuple[float, str]:
+    def visibility(
+        self, value: float, from_meters: bool = True
+    ) -> Tuple[float, str]:
         """
         Convert visibility to target units.
 

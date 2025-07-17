@@ -26,7 +26,9 @@ class SimpleFormatter(WeatherFormatter):
         units = weather_data.units
 
         # First line: Location, temperature, condition
-        location_name = location.name or f"{location.lat:.4f}, {location.lon:.4f}"
+        location_name = (
+            location.name or f"{location.lat:.4f}, {location.lon:.4f}"
+        )
         temp = self._safe_get(current, "temperature_2m")
         condition = self._safe_get(current, "condition", "Unknown")
         temp_unit = units.get("temperature", "°C")

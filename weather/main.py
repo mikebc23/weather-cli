@@ -2,10 +2,17 @@
 
 import argparse
 import sys
+from typing import Type
+from argparse import Namespace
 
 from .cache import WeatherCache
 from .config import WeatherConfig
-from .formatters import VisualFormatter, SimpleFormatter, RawFormatter
+from .formatters import (
+    RawFormatter,
+    SimpleFormatter,
+    VisualFormatter,
+    WeatherFormatter,
+)
 from .location import LocationResolver
 from .sources.open_meteo import OpenMeteoSource
 from .utils.exceptions import LocationError, WeatherError, WeatherSourceError
@@ -19,8 +26,8 @@ def create_parser() -> argparse.ArgumentParser:
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  weather                                    # Current location (auto-detect)
-  weather "New York"                         # City name
+  weather                                   # Current location (auto-detect)
+  weather "New York"                        # City name
   weather "10001"                           # ZIP code
   weather "40.7128,-74.0060"                # Coordinates
   weather --lat=40.7128 --lon=-74.0060      # Explicit coordinates
@@ -33,7 +40,10 @@ Examples:
     parser.add_argument(
         "location",
         nargs="?",
-        help="Location (city, ZIP code, coordinates, or leave empty for auto-detect)",
+        help=(
+            "Location (city, ZIP code, coordinates, or "
+            "leave empty for auto-detect)"
+        ),
     )
 
     parser.add_argument(
@@ -74,23 +84,35 @@ Examples:
     parser.add_argument("--timeout", type=int, help="HTTP timeout in seconds")
 
     # Cache options
-    parser.add_argument("--no-cache", action="store_true", help="Disable cache usage")
+    parser.add_argument(
+        "--no-cache", 
+        action="store_true", 
+        help="Disable cache usage"
+    )
 
     parser.add_argument(
         "--clear-cache", action="store_true", help="Clear cache and exit"
     )
 
     # Debug options
-    parser.add_argument("--version", action="version", version="weather-cli 1.0.0")
+    parser.add_argument(
+        "--version", 
+        action="version", 
+        version="weather-cli 1.0.0"
+    )
 
-    parser.add_argument("--debug", action="store_true", help="Enable debug output")
+    parser.add_argument(
+        "--debug", 
+        action="store_true", 
+        help="Enable debug output"
+    )
 
     return parser
 
 
-def get_formatter(format_name: str, units: str):
+def get_formatter(format_name: str, units: str) -> WeatherFormatter:
     """Get the appropriate formatter instance."""
-    formatters = {
+    formatters: dict[str, Type[WeatherFormatter]] = {
         "simple": SimpleFormatter,
         "visual": VisualFormatter,
         "raw": RawFormatter,
@@ -103,7 +125,7 @@ def get_formatter(format_name: str, units: str):
     return formatter_class(units=units)
 
 
-def get_weather_source(source_name: str, timeout: int):
+def get_weather_source(source_name: str, timeout: int) -> object:
     """Get the appropriate weather source instance."""
     sources = {
         "open-meteo": OpenMeteoSource,
@@ -117,7 +139,8 @@ def get_weather_source(source_name: str, timeout: int):
         # For now, fallback to open-meteo if other sources aren't implemented
         if source_name in ["wttr", "nws"]:
             print(
-                f"Warning: {source_name} source not yet implemented, using open-meteo",
+                f"Warning: {source_name} source not yet implemented, "
+                "using open-meteo",
                 file=sys.stderr,
             )
             source_class = OpenMeteoSource
@@ -127,7 +150,10 @@ def get_weather_source(source_name: str, timeout: int):
     return source_class(timeout=timeout)
 
 
-def resolve_location(args, location_resolver: LocationResolver):
+def resolve_location(
+    args: Namespace, 
+    location_resolver: LocationResolver
+) -> object:
     """Resolve location from command line arguments."""
     # Check for explicit coordinates
     if args.lat is not None and args.lon is not None:
@@ -143,7 +169,7 @@ def resolve_location(args, location_resolver: LocationResolver):
     return location_resolver.resolve(args.location)
 
 
-def main():
+def main() -> int:
     """Main CLI entry point."""
     try:
         # Parse command line arguments
@@ -172,7 +198,8 @@ def main():
 
         if args.debug:
             print(
-                f"Debug: Using format={format_name}, units={units}, source={source_name}",
+                f"Debug: Using format={format_name}, units={units}, "
+                f"source={source_name}",
                 file=sys.stderr,
             )
 
@@ -196,7 +223,7 @@ def main():
             )
 
             # Create cache key from location
-            cache_key = location.normalize_for_cache()
+            cache_key = str(location)
             cached_data = cache.get(cache_key, source_name, units)
 
             if cached_data and args.debug:
@@ -205,6 +232,27 @@ def main():
             # Convert cached dictionary back to WeatherData object
             if cached_data:
                 from .sources.base import WeatherData
+                from .location import Coordinates
+
+                # Ensure location is a Coordinates instance
+                if not isinstance(location, Coordinates):
+                    # Try to reconstruct Coordinates from string if possible
+                    if hasattr(location, 'lat') and hasattr(location, 'lon'):
+                        location = Coordinates(
+                            lat=location.lat, 
+                            lon=location.lon
+                        )
+                    elif isinstance(location, str) and ',' in location:
+                        lat_str, lon_str = location.split(',', 1)
+                        location = Coordinates(
+                            lat=float(lat_str),
+                            lon=float(lon_str)
+                        )
+                    else:
+                        raise WeatherError(
+                            "Cached location is not a valid "
+                            "Coordinates instance"
+                        )
 
                 weather_data = WeatherData(
                     location=location,
@@ -220,12 +268,17 @@ def main():
             if args.debug:
                 print("Debug: Fetching fresh weather data", file=sys.stderr)
 
-            weather_data = weather_source.get_weather(location, units)
+            weather_data = weather_source.get_weather(location, units)  # type: ignore
 
             # Cache the result (if caching enabled)
             if use_cache:
-                cache_key = location.normalize_for_cache()
-                cache.set(cache_key, source_name, units, weather_data.to_dict())
+                cache_key = str(location)
+                cache.set(
+                    cache_key,
+                    source_name,
+                    units,
+                    weather_data.to_dict(),
+                )
 
         # Format and display the result
         output = formatter.format(weather_data)
@@ -234,7 +287,7 @@ def main():
         return 0
 
     except KeyboardInterrupt:
-        print("\\nInterrupted by user", file=sys.stderr)
+        print("\nInterrupted by user", file=sys.stderr)
         return 130
 
     except LocationError as e:

@@ -13,7 +13,11 @@ from .utils.exceptions import CacheError
 class WeatherCache:
     """Simple file-based cache for weather data."""
 
-    def __init__(self, cache_dir: Optional[str] = None, cache_duration: int = 300):
+    def __init__(
+        self,
+        cache_dir: Optional[str] = None,
+        cache_duration: int = 300,
+    ):
         """
         Initialize cache system.
 
@@ -54,7 +58,12 @@ class WeatherCache:
         """Get cache file path for the given key."""
         return self.cache_dir / f"{cache_key}.json"
 
-    def get(self, location: str, source: str, units: str) -> Optional[Dict[str, Any]]:
+    def get(
+        self,
+        location: str,
+        source: str,
+        units: str,
+    ) -> Optional[Dict[str, Any]]:
         """
         Retrieve cached weather data.
 
@@ -88,6 +97,8 @@ class WeatherCache:
 
             # Mark as cache hit
             weather_data = cache_data.get("data", {})
+            if not isinstance(weather_data, dict):
+                return None
             weather_data["cache_hit"] = True
             weather_data["cached_at"] = datetime.fromtimestamp(
                 cached_time, tz=timezone.utc
@@ -99,7 +110,13 @@ class WeatherCache:
             # If there's any error reading cache, just return None
             return None
 
-    def set(self, location: str, source: str, units: str, data: Dict[str, Any]) -> None:
+    def set(
+        self,
+        location: str,
+        source: str,
+        units: str,
+        data: Dict[str, Any],
+    ) -> None:
         """
         Cache weather data.
 
