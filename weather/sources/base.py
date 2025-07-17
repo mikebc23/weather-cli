@@ -2,7 +2,8 @@
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from typing import Any, Dict
+from datetime import datetime
+from typing import Any, Dict, List, Optional
 
 from ..location import Coordinates
 
@@ -17,6 +18,11 @@ class WeatherData:
     source: str
     timestamp: str
     cache_hit: bool = False
+    
+    # New fields for date/hourly support
+    forecast_type: str = "current"  # current, historical, forecast, hourly
+    forecast_date: Optional[str] = None
+    hourly_data: Optional[List[Dict[str, Any]]] = None
 
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary for JSON serialization."""
@@ -32,6 +38,9 @@ class WeatherData:
             "source": self.source,
             "timestamp": self.timestamp,
             "cache_hit": self.cache_hit,
+            "forecast_type": self.forecast_type,
+            "forecast_date": self.forecast_date,
+            "hourly_data": self.hourly_data,
         }
 
 
@@ -44,13 +53,21 @@ class WeatherSource(ABC):
         self.name = self.__class__.__name__.replace("Source", "").lower()
 
     @abstractmethod
-    def get_weather(self, location: Coordinates, units: str = "metric") -> WeatherData:
+    def get_weather(
+        self,
+        location: Coordinates,
+        units: str = "metric",
+        date: Optional[datetime] = None,
+        hourly: bool = False,
+    ) -> WeatherData:
         """
         Get weather data for the specified location.
 
         Args:
             location: Location coordinates
             units: Unit system ('metric' or 'imperial')
+            date: Date for historical/forecast data
+            hourly: Whether to return hourly data
 
         Returns:
             WeatherData object
@@ -70,6 +87,18 @@ class WeatherSource(ABC):
         Returns:
             True if location is supported, False otherwise
         """
+
+    @abstractmethod
+    def supports_historical(self) -> bool:
+        """Return whether source supports historical data."""
+        
+    @abstractmethod
+    def supports_forecast(self) -> bool:
+        """Return whether source supports forecast data."""
+        
+    @abstractmethod
+    def supports_hourly(self) -> bool:
+        """Return whether source supports hourly data."""
 
     def get_source_name(self) -> str:
         """Get the name of this weather source."""

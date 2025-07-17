@@ -2,7 +2,7 @@
 
 import argparse
 import sys
-from typing import Type
+from typing import Type, Dict
 from argparse import Namespace
 
 from .cache import WeatherCache
@@ -33,6 +33,9 @@ Examples:
   weather --lat=40.7128 --lon=-74.0060      # Explicit coordinates
   weather "London" --format=visual --units=metric
   weather "Tokyo" --source=open-meteo --format=simple
+  weather "Rome" --date tomorrow           # Tomorrow's forecast
+  weather "Berlin" --date "07252025"       # Specific date (MMDDYYYY)
+  weather "Madrid" --hourly                # Hourly forecast
         """,
     )
 
@@ -52,6 +55,21 @@ Examples:
 
     parser.add_argument(
         "--lon", "--longitude", type=float, help="Longitude (use with --lat)"
+    )
+
+    # Date and time arguments
+    parser.add_argument(
+        "--date",
+        help=(
+            "Date for weather data: "
+            "MMDDYYYY, today, tomorrow"
+        ),
+    )
+
+    parser.add_argument(
+        "--hourly",
+        action="store_true",
+        help="Show hourly forecast instead of current conditions",
     )
 
     # Output format options
@@ -112,7 +130,7 @@ Examples:
 
 def get_formatter(format_name: str, units: str) -> WeatherFormatter:
     """Get the appropriate formatter instance."""
-    formatters: dict[str, Type[WeatherFormatter]] = {
+    formatters: Dict[str, Type[WeatherFormatter]] = {
         "simple": SimpleFormatter,
         "visual": VisualFormatter,
         "raw": RawFormatter,
@@ -196,12 +214,28 @@ def main() -> int:
         timeout = args.timeout or config.get("timeout")
         use_cache = not args.no_cache
 
+        # Parse date input (NEW)
+        from .utils.date_utils import DateParser
+        
+        target_date = None
+        query_type = "current"
+        
+        if args.date:
+            target_date, query_type = DateParser.parse_date_input(args.date)
+            DateParser.validate_date_range(target_date)
+
         if args.debug:
             print(
                 f"Debug: Using format={format_name}, units={units}, "
                 f"source={source_name}",
                 file=sys.stderr,
             )
+            if args.date:
+                print(
+                    f"Debug: Date: {args.date} -> "
+                    f"{DateParser.format_date(target_date)} ({query_type})",
+                    file=sys.stderr,
+                )
 
         # Initialize components
         location_resolver = LocationResolver(timeout=timeout)
@@ -214,9 +248,11 @@ def main() -> int:
         if args.debug:
             print(f"Debug: Resolved location: {location}", file=sys.stderr)
 
-        # Check cache first (if enabled)
+        # Check cache first (if enabled and current weather only)
         weather_data = None
-        if use_cache:
+        use_cache_for_request = use_cache and query_type == "current" and not args.hourly
+        
+        if use_cache_for_request:
             cache = WeatherCache(
                 cache_dir=config.get_cache_dir(),
                 cache_duration=config.get("cache_duration"),
@@ -232,28 +268,7 @@ def main() -> int:
             # Convert cached dictionary back to WeatherData object
             if cached_data:
                 from .sources.base import WeatherData
-                from .location import Coordinates
-
-                # Ensure location is a Coordinates instance
-                if not isinstance(location, Coordinates):
-                    # Try to reconstruct Coordinates from string if possible
-                    if hasattr(location, 'lat') and hasattr(location, 'lon'):
-                        location = Coordinates(
-                            lat=location.lat, 
-                            lon=location.lon
-                        )
-                    elif isinstance(location, str) and ',' in location:
-                        lat_str, lon_str = location.split(',', 1)
-                        location = Coordinates(
-                            lat=float(lat_str),
-                            lon=float(lon_str)
-                        )
-                    else:
-                        raise WeatherError(
-                            "Cached location is not a valid "
-                            "Coordinates instance"
-                        )
-
+                
                 weather_data = WeatherData(
                     location=location,
                     current=cached_data.get("current", {}),
@@ -261,6 +276,9 @@ def main() -> int:
                     source=cached_data.get("source", source_name),
                     timestamp=cached_data.get("timestamp", ""),
                     cache_hit=True,
+                    forecast_type=cached_data.get("forecast_type", "current"),
+                    forecast_date=cached_data.get("forecast_date"),
+                    hourly_data=cached_data.get("hourly_data"),
                 )
 
         # Get fresh data if not cached
@@ -268,10 +286,13 @@ def main() -> int:
             if args.debug:
                 print("Debug: Fetching fresh weather data", file=sys.stderr)
 
-            weather_data = weather_source.get_weather(location, units)  # type: ignore
+            # Pass date and hourly parameters to source
+            weather_data = weather_source.get_weather(  # type: ignore
+                location, units, target_date, args.hourly
+            )
 
-            # Cache the result (if caching enabled)
-            if use_cache:
+            # Cache the result (if caching enabled and current weather)
+            if use_cache_for_request:
                 cache_key = str(location)
                 cache.set(
                     cache_key,
