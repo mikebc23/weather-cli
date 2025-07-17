@@ -64,13 +64,11 @@ class DateParser:
 
     @staticmethod
     def format_date(date_obj: datetime) -> str:
-        """Format datetime object for display."""
+        """Format datetime object for display or API calls."""
         return date_obj.strftime("%Y-%m-%d")
 
-    @staticmethod
-    def format_date_for_api(date_obj: datetime) -> str:
-        """Format datetime object for API calls."""
-        return date_obj.strftime("%Y-%m-%d")
+    # Alias format_date_for_api to format_date for semantic clarity
+    format_date_for_api = format_date
 
     @staticmethod
     def validate_date_range(date_obj: datetime) -> None:
@@ -86,7 +84,7 @@ class DateParser:
         today = datetime.now()
 
         # Check historical limit (2 years back)
-        earliest_date = today - timedelta(days=730)
+        earliest_date = today - timedelta(days=MAX_HISTORICAL_DAYS)
         if date_obj < earliest_date:
             raise WeatherError(
                 f"Date too far in the past. "
