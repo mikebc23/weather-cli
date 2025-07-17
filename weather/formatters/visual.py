@@ -31,7 +31,9 @@ class VisualFormatter(WeatherFormatter):
         units = weather_data.units
 
         # Prepare data
-        location_name = location.name or (f"{location.lat:.4f}, {location.lon:.4f}")
+        location_name = (
+            location.name or (f"{location.lat:.4f}, {location.lon:.4f}")
+        )
         temp = self._safe_get(current, "temperature_2m")
         temp_unit = units.get("temperature", "°C")
         temperature = f"{temp}{temp_unit}"
@@ -174,9 +176,6 @@ class VisualFormatter(WeatherFormatter):
         Returns:
             Arrow character indicating wind direction
         """
-        if wind_direction_deg is None:
-            return "→"
-
         # Convert degrees to 8-direction arrows
         arrows = ["↑", "↗", "→", "↘", "↓", "↙", "←", "↖"]
         index = round(wind_direction_deg / 45) % 8

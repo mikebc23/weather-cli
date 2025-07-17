@@ -53,7 +53,12 @@ class LocationResolver:
         self.timeout = timeout
         self.session = requests.Session()
         self.session.headers.update(
-            {"User-Agent": "weather-cli/1.0.0 (https://github.com/user/weather-cli)"}
+            {
+                "User-Agent": (
+                    "weather-cli/1.0.0 "
+                    "(https://github.com/user/weather-cli)"
+                )
+            }
         )
 
     def resolve(self, input_str: Optional[str] = None) -> Coordinates:
@@ -86,7 +91,9 @@ class LocationResolver:
         elif location_type == "place_name":
             return self._geocode_place(input_str)
         else:
-            raise LocationError(f"Unknown location type for input: {input_str}")
+            raise LocationError(
+                f"Unknown location type for input: {input_str}"
+            )
 
     def _detect_location_type(self, input_str: str) -> str:
         """
@@ -96,7 +103,8 @@ class LocationResolver:
             input_str: Input string to analyze
 
         Returns:
-            Location type: 'coordinates', 'dms_coordinates', 'zipcode', or 'place_name'
+            Location type: 'coordinates', 'dms_coordinates', 'zipcode', or
+                'place_name'
         """
         # Remove whitespace for pattern matching
         clean_input = input_str.strip()
@@ -138,7 +146,8 @@ class LocationResolver:
 
             if len(parts) != 2:
                 raise LocationError(
-                    f"Invalid coordinate format: {input_str}. Expected 'lat,lon' or 'lat lon'"
+                    f"Invalid coordinate format: {input_str}. "
+                    "Expected 'lat,lon' or 'lat lon'"
                 )
 
             lat = float(parts[0].strip())
@@ -172,12 +181,16 @@ class LocationResolver:
                 ([NSEW])                  # direction
             """
 
-            matches = re.findall(pattern, input_str.replace(" ", ""), re.VERBOSE)
+            matches = re.findall(
+                pattern, input_str.replace(" ", ""), re.VERBOSE
+            )
 
             if len(matches) != 2:
                 raise LocationError(f"Invalid DMS format: {input_str}")
 
-            def dms_to_decimal(degrees, minutes, seconds, direction):
+            def dms_to_decimal(
+                degrees: str, minutes: str, seconds: str, direction: str
+            ) -> float:
                 """Convert DMS to decimal degrees."""
                 deg = float(degrees)
                 min_val = float(minutes) if minutes else 0
@@ -196,7 +209,8 @@ class LocationResolver:
 
             if not lat_match or not lon_match:
                 raise LocationError(
-                    f"Could not find both latitude and longitude in: {input_str}"
+                    f"Could not find both latitude and longitude in: "
+                    f"{input_str}"
                 )
 
             lat = dms_to_decimal(*lat_match)
@@ -231,7 +245,9 @@ class LocationResolver:
                 "addressdetails": 1,
             }
 
-            response = self.session.get(url, params=params, timeout=self.timeout)
+            response = self.session.get(
+                url, params=params, timeout=self.timeout
+            )
             response.raise_for_status()
 
             data = response.json()
@@ -245,7 +261,11 @@ class LocationResolver:
 
             # Extract location name from address
             address = result.get("address", {})
-            city = address.get("city") or address.get("town") or address.get("village")
+            city = (
+                address.get("city") 
+                or address.get("town") 
+                or address.get("village")
+            )
             state = address.get("state")
 
             name = f"{city}, {state}" if city and state else zipcode
@@ -253,7 +273,9 @@ class LocationResolver:
             return Coordinates(lat=lat, lon=lon, name=name, country="US")
 
         except requests.RequestException as e:
-            raise LocationError(f"Failed to geocode ZIP code {zipcode}: {e}") from e
+            raise LocationError(
+                f"Failed to geocode ZIP code {zipcode}: {e}"
+            ) from e
         except (KeyError, ValueError) as e:
             raise LocationError(
                 f"Invalid geocoding response for ZIP code {zipcode}"
@@ -282,7 +304,12 @@ class LocationResolver:
                 "addressdetails": 1,
             }
 
-            response = self.session.get(url, params=params, timeout=self.timeout)
+            response = self.session.get(
+                url,
+                params=params,
+                timeout=self.timeout
+            )
+
             response.raise_for_status()
 
             data = response.json()
@@ -303,7 +330,6 @@ class LocationResolver:
                 address.get("city")
                 or address.get("town")
                 or address.get("village")
-                or address.get("municipality")
             )
 
             country = address.get("country")
@@ -313,12 +339,18 @@ class LocationResolver:
             else:
                 # Fallback to first two parts of display_name
                 parts = display_name.split(", ")
-                name = ", ".join(parts[:2]) if len(parts) >= 2 else display_name
+                name = (
+                    ", ".join(parts[:2])
+                    if len(parts) >= 2
+                    else display_name
+                )
 
             return Coordinates(lat=lat, lon=lon, name=name, country=country)
 
         except requests.RequestException as e:
-            raise LocationError(f"Failed to geocode place {place_name}: {e}") from e
+            raise LocationError(
+                f"Failed to geocode place {place_name}: {e}"
+            ) from e
         except (KeyError, ValueError) as e:
             raise LocationError(
                 f"Invalid geocoding response for place {place_name}"
@@ -357,7 +389,9 @@ class LocationResolver:
             return Coordinates(lat=lat, lon=lon, name=name, country=country)
 
         except requests.RequestException as e:
-            raise LocationError(f"Failed to detect current location: {e}") from e
+            raise LocationError(
+                f"Failed to detect current location: {e}"
+            ) from e
         except (KeyError, ValueError) as e:
             raise LocationError("Invalid IP geolocation response") from e
 
@@ -370,7 +404,10 @@ def is_zipcode(input_str: str) -> bool:
 
 def is_coordinates(input_str: str) -> bool:
     """Check if input string contains decimal coordinates."""
-    return re.match(r"^-?\d+\.?\d*[,\s]+-?\d+\.?\d*$", input_str.strip()) is not None
+    return re.match(
+        r"^-?\d+\.?\d*[,\s]+-?\d+\.?\d*$",
+        input_str.strip()
+    ) is not None
 
 
 def is_dms_coordinates(input_str: str) -> bool:
@@ -403,4 +440,5 @@ if __name__ == "__main__":
             print("-" * 50)
         except LocationError as e:
             print(f"Error with '{test_input}': {e}")
+            print("-" * 50)
             print("-" * 50)

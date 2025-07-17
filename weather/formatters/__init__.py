@@ -1,9 +1,9 @@
 """Output formatters package."""
 
-from .visual import VisualFormatter
 from .base import WeatherFormatter
-from .simple import SimpleFormatter
 from .raw import RawFormatter
+from .simple import SimpleFormatter
+from .visual import VisualFormatter
 
 __all__ = [
     "WeatherFormatter",
