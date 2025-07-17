@@ -86,7 +86,7 @@ class DateParser:
         today = datetime.now()
         
         # Check historical limit (2 years back)
-        earliest_date = today - timedelta(days=730)
+        earliest_date = today - timedelta(days=MAX_HISTORICAL_DAYS)
         if date_obj < earliest_date:
             raise WeatherError(
                 f"Date too far in the past. "
