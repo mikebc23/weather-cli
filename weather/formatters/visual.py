@@ -7,7 +7,7 @@ from .base import WeatherFormatter
 
 
 class VisualFormatter(WeatherFormatter):
-    """Visual ASCII art formatter for weather data."""
+    """ASCII art formatter for weather data."""
 
     def format(self, weather_data: WeatherData) -> str:
         r"""Format weather data with ASCII art.
