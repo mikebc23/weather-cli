@@ -82,14 +82,7 @@ class SimpleFormatter(WeatherFormatter):
         # Hourly entries
         for hour_data in weather_data.hourly_data:
             time_str = hour_data.get("time", "")
-            if time_str:
-                # Extract hour from ISO format
-                if "T" in time_str:
-                    hour = time_str.split("T")[1][:5]
-                else:
-                    hour = time_str
-            else:
-                hour = "N/A"
+            hour = self._extract_hour(time_str)
                 
             temp = self._safe_get(hour_data, "temperature_2m")
             condition = self._safe_get(hour_data, "condition", "Unknown")
