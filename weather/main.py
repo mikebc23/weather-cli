@@ -2,17 +2,12 @@
 
 import argparse
 import sys
-from typing import Type, Dict
 from argparse import Namespace
+from typing import Dict, Type
 
 from .cache import WeatherCache
 from .config import WeatherConfig
-from .formatters import (
-    RawFormatter,
-    SimpleFormatter,
-    VisualFormatter,
-    WeatherFormatter,
-)
+from .formatters import RawFormatter, SimpleFormatter, VisualFormatter, WeatherFormatter
 from .location import LocationResolver
 from .sources.open_meteo import OpenMeteoSource
 from .utils.exceptions import LocationError, WeatherError, WeatherSourceError
@@ -44,8 +39,7 @@ Examples:
         "location",
         nargs="?",
         help=(
-            "Location (city, ZIP code, coordinates, or "
-            "leave empty for auto-detect)"
+            "Location (city, ZIP code, coordinates, or " "leave empty for auto-detect)"
         ),
     )
 
@@ -60,10 +54,7 @@ Examples:
     # Date and time arguments
     parser.add_argument(
         "--date",
-        help=(
-            "Date for weather data: "
-            "MMDDYYYY, today, tomorrow"
-        ),
+        help=("Date for weather data: " "MMDDYYYY, today, tomorrow"),
     )
 
     parser.add_argument(
@@ -102,28 +93,16 @@ Examples:
     parser.add_argument("--timeout", type=int, help="HTTP timeout in seconds")
 
     # Cache options
-    parser.add_argument(
-        "--no-cache", 
-        action="store_true", 
-        help="Disable cache usage"
-    )
+    parser.add_argument("--no-cache", action="store_true", help="Disable cache usage")
 
     parser.add_argument(
         "--clear-cache", action="store_true", help="Clear cache and exit"
     )
 
     # Debug options
-    parser.add_argument(
-        "--version", 
-        action="version", 
-        version="weather-cli 1.0.0"
-    )
+    parser.add_argument("--version", action="version", version="weather-cli 1.0.0")
 
-    parser.add_argument(
-        "--debug", 
-        action="store_true", 
-        help="Enable debug output"
-    )
+    parser.add_argument("--debug", action="store_true", help="Enable debug output")
 
     return parser
 
@@ -168,10 +147,7 @@ def get_weather_source(source_name: str, timeout: int) -> object:
     return source_class(timeout=timeout)
 
 
-def resolve_location(
-    args: Namespace, 
-    location_resolver: LocationResolver
-) -> object:
+def resolve_location(args: Namespace, location_resolver: LocationResolver) -> object:
     """Resolve location from command line arguments."""
     # Check for explicit coordinates
     if args.lat is not None and args.lon is not None:
@@ -216,10 +192,10 @@ def main() -> int:
 
         # Parse date input (NEW)
         from .utils.date_utils import DateParser
-        
+
         target_date = None
         query_type = "current"
-        
+
         if args.date:
             target_date, query_type = DateParser.parse_date_input(args.date)
             DateParser.validate_date_range(target_date)
@@ -250,8 +226,10 @@ def main() -> int:
 
         # Check cache first (if enabled and current weather only)
         weather_data = None
-        use_cache_for_request = use_cache and query_type == "current" and not args.hourly
-        
+        use_cache_for_request = (
+            use_cache and query_type == "current" and not args.hourly
+        )
+
         if use_cache_for_request:
             cache = WeatherCache(
                 cache_dir=config.get_cache_dir(),
@@ -268,7 +246,7 @@ def main() -> int:
             # Convert cached dictionary back to WeatherData object
             if cached_data:
                 from .sources.base import WeatherData
-                
+
                 weather_data = WeatherData(
                     location=location,
                     current=cached_data.get("current", {}),

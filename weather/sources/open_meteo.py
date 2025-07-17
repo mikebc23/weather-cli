@@ -60,10 +60,12 @@ class OpenMeteoSource(WeatherSource):
 
             # Add date parameters for historical data
             if start_date:
-                params.update({
-                    "start_date": start_date,
-                    "end_date": end_date,
-                })
+                params.update(
+                    {
+                        "start_date": start_date,
+                        "end_date": end_date,
+                    }
+                )
 
             # Configure data fields based on hourly vs current
             if hourly:
@@ -93,15 +95,17 @@ class OpenMeteoSource(WeatherSource):
                     "visibility",
                 ]
                 forecast_type = (
-                    "historical" if date and 
-                    date.date() < datetime.now().date()
+                    "historical"
+                    if date and date.date() < datetime.now().date()
                     else "current"
                 )
 
             # Add common parameters
-            params.update({
-                "timezone": "auto",
-            })
+            params.update(
+                {
+                    "timezone": "auto",
+                }
+            )
 
             # Add forecast days for future dates
             if not start_date:
@@ -122,9 +126,7 @@ class OpenMeteoSource(WeatherSource):
 
             # Parse response
             if "error" in response:
-                raise WeatherSourceError(
-                    f"Open-Meteo API error: {response['error']}"
-                )
+                raise WeatherSourceError(f"Open-Meteo API error: {response['error']}")
 
             # Set units based on the API response
             units_dict = {
@@ -149,9 +151,7 @@ class OpenMeteoSource(WeatherSource):
             # Process hourly data if requested
             hourly_data_list = None
             if hourly and "hourly" in response:
-                hourly_data_list = self._process_hourly_data(
-                    response["hourly"], date
-                )
+                hourly_data_list = self._process_hourly_data(response["hourly"], date)
 
             # Process current/daily data
             if hourly and hourly_data_list:
@@ -165,12 +165,8 @@ class OpenMeteoSource(WeatherSource):
 
                 current_weather = {
                     "temperature_2m": current_data.get("temperature_2m"),
-                    "relative_humidity_2m": current_data.get(
-                        "relative_humidity_2m"
-                    ),
-                    "apparent_temperature": current_data.get(
-                        "apparent_temperature"
-                    ),
+                    "relative_humidity_2m": current_data.get("relative_humidity_2m"),
+                    "apparent_temperature": current_data.get("apparent_temperature"),
                     "wind_speed_10m": current_data.get("wind_speed_10m"),
                     "wind_direction_10m": current_data.get("wind_direction_10m"),
                     "wind_gusts_10m": current_data.get("wind_gusts_10m"),
@@ -221,30 +217,22 @@ class OpenMeteoSource(WeatherSource):
 
             # Get default lists for missing data
             none_list = [None] * len(times)
-            
+
             hour_data = {
                 "time": time_str,
-                "temperature_2m": hourly_data.get(
-                    "temperature_2m", none_list
-                )[i],
+                "temperature_2m": hourly_data.get("temperature_2m", none_list)[i],
                 "relative_humidity_2m": hourly_data.get(
                     "relative_humidity_2m", none_list
                 )[i],
                 "apparent_temperature": hourly_data.get(
                     "apparent_temperature", none_list
                 )[i],
-                "wind_speed_10m": hourly_data.get(
-                    "wind_speed_10m", none_list
-                )[i],
-                "wind_direction_10m": hourly_data.get(
-                    "wind_direction_10m", none_list
-                )[i],
-                "pressure_msl": hourly_data.get(
-                    "pressure_msl", none_list
-                )[i],
-                "cloud_cover": hourly_data.get(
-                    "cloud_cover", none_list
-                )[i],
+                "wind_speed_10m": hourly_data.get("wind_speed_10m", none_list)[i],
+                "wind_direction_10m": hourly_data.get("wind_direction_10m", none_list)[
+                    i
+                ],
+                "pressure_msl": hourly_data.get("pressure_msl", none_list)[i],
+                "cloud_cover": hourly_data.get("cloud_cover", none_list)[i],
                 "weather_code": weather_code,
                 "condition": condition,
             }
