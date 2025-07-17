@@ -12,20 +12,21 @@ class VisualFormatter(WeatherFormatter):
     def format(self, weather_data: WeatherData) -> str:
         r"""Format weather data with ASCII art.
 
-        Example output:
-        San José, CR
-             \   /     22°C
-              .-.      Partly Cloudy
-           ― (   ) ―   ↗ 8 km/h
-              `-'      65% humidity
-             /   \
-
         Args:
             weather_data: Weather data to format
 
         Returns:
             Formatted string for display
         """
+        # Handle hourly data
+        if weather_data.forecast_type == "hourly" and weather_data.hourly_data:
+            return self._format_hourly(weather_data)
+        
+        # Handle current/historical/forecast data
+        return self._format_current(weather_data)
+
+    def _format_current(self, weather_data: WeatherData) -> str:
+        """Format current weather data with ASCII art."""
         current = weather_data.current
         location = weather_data.location
         units = weather_data.units
@@ -180,3 +181,73 @@ class VisualFormatter(WeatherFormatter):
         arrows = ["↑", "↗", "→", "↘", "↓", "↙", "←", "↖"]
         index = round(wind_direction_deg / 45) % 8
         return arrows[index]
+
+    def _format_hourly(self, weather_data: WeatherData) -> str:
+        """Format hourly weather data with simplified visual representation."""
+        if not weather_data.hourly_data:
+            return "No hourly data available"
+
+        location = weather_data.location
+        units = weather_data.units
+        
+        location_name = (
+            location.name or f"{location.lat:.4f}, {location.lon:.4f}"
+        )
+        
+        temp_unit = units.get("temperature", "°C")
+        
+        # Header
+        date_str = weather_data.forecast_date or "Today"
+        lines = [
+            f"Hourly forecast for {location_name} ({date_str}):",
+            "=" * 60,
+            ""
+        ]
+        
+        # Hourly entries (simplified for readability)
+        for hour_data in weather_data.hourly_data:
+            time_str = hour_data.get("time", "")
+            if time_str and "T" in time_str:
+                hour = time_str.split("T")[1][:5]
+            else:
+                hour = "N/A"
+                
+            temp = self._safe_get(hour_data, "temperature_2m")
+            condition = self._safe_get(hour_data, "condition", "Unknown")
+            humidity = self._safe_get(hour_data, "relative_humidity_2m")
+            
+            # Simple icon based on condition
+            icon = self._get_simple_icon(hour_data.get("weather_code", 0))
+            
+            line = (
+                f"{hour}  {icon}  {temp}{temp_unit}  {condition}  "
+                f"({humidity}% humidity)"
+            )
+            lines.append(line)
+        
+        return "\n".join(lines)
+    
+    def _get_simple_icon(self, weather_code: int) -> str:
+        """Get a simple icon for weather condition."""
+        if weather_code == 0:
+            return "☀️"
+        elif weather_code in [1, 2]:
+            return "⛅"
+        elif weather_code == 3:
+            return "☁️"
+        elif weather_code in [45, 48]:
+            return "🌫️"
+        elif weather_code in [51, 53, 55, 56, 57]:
+            return "🌦️"
+        elif weather_code in [61, 63, 65, 66, 67]:
+            return "🌧️"
+        elif weather_code in [71, 73, 75, 77]:
+            return "❄️"
+        elif weather_code in [80, 81, 82]:
+            return "🌦️"
+        elif weather_code in [85, 86]:
+            return "🌨️"
+        elif weather_code in [95, 96, 99]:
+            return "⛈️"
+        else:
+            return "❓"
