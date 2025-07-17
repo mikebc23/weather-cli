@@ -18,7 +18,7 @@ class WeatherData:
     source: str
     timestamp: str
     cache_hit: bool = False
-    
+
     # New fields for date/hourly support
     forecast_type: str = "current"  # current, historical, forecast, hourly
     forecast_date: Optional[str] = None
@@ -91,11 +91,11 @@ class WeatherSource(ABC):
     @abstractmethod
     def supports_historical(self) -> bool:
         """Return whether source supports historical data."""
-        
+
     @abstractmethod
     def supports_forecast(self) -> bool:
         """Return whether source supports forecast data."""
-        
+
     @abstractmethod
     def supports_hourly(self) -> bool:
         """Return whether source supports hourly data."""
