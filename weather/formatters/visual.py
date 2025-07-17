@@ -6,8 +6,8 @@ from ..sources.base import WeatherData
 from .base import WeatherFormatter
 
 
-class AsciiFormatter(WeatherFormatter):
-    """ASCII art formatter for weather data."""
+class VisualFormatter(WeatherFormatter):
+    """Visual ASCII art formatter for weather data."""
 
     def format(self, weather_data: WeatherData) -> str:
         r"""Format weather data with ASCII art.

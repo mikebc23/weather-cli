@@ -13,7 +13,7 @@ class WeatherConfig:
 
     DEFAULT_CONFIG = {
         "units": "metric",
-        "format": "minimal",
+        "format": "simple",
         "source": "open-meteo",
         "cache_duration": 300,  # 5 minutes in seconds
         "timeout": 10,  # HTTP timeout in seconds
@@ -111,7 +111,7 @@ class WeatherConfig:
             )
 
         # Validate format
-        valid_formats = ["minimal", "table", "ascii", "raw"]
+        valid_formats = ["simple", "visual", "raw"]
         if self.config["format"] not in valid_formats:
             raise ConfigError(
                 f"Invalid format: {self.config['format']}. Must be one of {valid_formats}"
