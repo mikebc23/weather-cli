@@ -1,15 +1,13 @@
 """Output formatters package."""
 
-from .ascii import AsciiFormatter
+from .visual import VisualFormatter
 from .base import WeatherFormatter
-from .minimal import MinimalFormatter
+from .simple import SimpleFormatter
 from .raw import RawFormatter
-from .table import TableFormatter
 
 __all__ = [
     "WeatherFormatter",
-    "MinimalFormatter",
-    "TableFormatter",
-    "AsciiFormatter",
+    "SimpleFormatter",
+    "VisualFormatter",
     "RawFormatter",
 ]

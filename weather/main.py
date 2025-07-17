@@ -5,7 +5,7 @@ import sys
 
 from .cache import WeatherCache
 from .config import WeatherConfig
-from .formatters import AsciiFormatter, MinimalFormatter, RawFormatter, TableFormatter
+from .formatters import VisualFormatter, SimpleFormatter, RawFormatter
 from .location import LocationResolver
 from .sources.open_meteo import OpenMeteoSource
 from .utils.exceptions import LocationError, WeatherError, WeatherSourceError
@@ -24,8 +24,8 @@ Examples:
   weather "10001"                           # ZIP code
   weather "40.7128,-74.0060"                # Coordinates
   weather --lat=40.7128 --lon=-74.0060      # Explicit coordinates
-  weather "London" --format=ascii --units=metric
-  weather "Tokyo" --source=open-meteo --format=table
+  weather "London" --format=visual --units=metric
+  weather "Tokyo" --source=open-meteo --format=simple
         """,
     )
 
@@ -48,8 +48,8 @@ Examples:
     parser.add_argument(
         "--format",
         "-f",
-        choices=["minimal", "table", "ascii", "raw"],
-        help="Output format (default: minimal)",
+        choices=["simple", "visual", "raw"],
+        help="Output format (default: simple)",
     )
 
     # Unit system
@@ -91,9 +91,8 @@ Examples:
 def get_formatter(format_name: str, units: str):
     """Get the appropriate formatter instance."""
     formatters = {
-        "minimal": MinimalFormatter,
-        "table": TableFormatter,
-        "ascii": AsciiFormatter,
+        "simple": SimpleFormatter,
+        "visual": VisualFormatter,
         "raw": RawFormatter,
     }
 

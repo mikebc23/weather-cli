@@ -4,8 +4,8 @@ from ..sources.base import WeatherData
 from .base import WeatherFormatter
 
 
-class MinimalFormatter(WeatherFormatter):
-    """Minimal text formatter for weather data."""
+class SimpleFormatter(WeatherFormatter):
+    """Simple text formatter for weather data."""
 
     def format(self, weather_data: WeatherData) -> str:
         """

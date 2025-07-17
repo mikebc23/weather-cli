@@ -5,7 +5,7 @@ A simple, fast, and feature-rich command-line weather tool with multiple data so
 ## Features
 
 - 🌍 **Multiple location input types**: City names, ZIP codes, coordinates (decimal & DMS), auto-detection
-- 📊 **Multiple output formats**: Minimal, table, ASCII art, raw JSON
+- 📊 **Multiple output formats**: Simple, visual, raw JSON
 - 📐 **Unit systems**: Metric and Imperial units
 - 🏃‍♂️ **Fast and lightweight**: Minimal dependencies, quick responses
 - 💾 **Smart caching**: 5-minute cache to reduce API calls
@@ -43,28 +43,21 @@ weather "9.9281,-84.0907"            # San José, CR
 weather --lat=51.5074 --lon=-0.1278  # London
 
 # Different output formats
-weather "Tokyo" --format=ascii
-weather "London" --format=table --units=imperial
+weather "Tokyo" --format=visual
+weather "London" --format=simple --units=imperial
 weather "NYC" --format=raw        # JSON output
 ```
 
 ## Output Formats
 
-### Minimal (default)
+### Simple (default)
 
 ```text
 San José, CR: 22°C, Partly Cloudy
 Feels like: 25°C | Humidity: 65% | Wind: 8 km/h
 ```
 
-### Table
-
-```text
-Location    | Temp  | Condition    | Feels | Humidity | Wind
-San José CR | 22°C  | Partly Cloudy| 25°C  | 65%      | 8 km/h
-```
-
-### ASCII Art
+### Visual
 
 ```text
 San José, CR
@@ -119,7 +112,7 @@ Location Options:
   --lon LON             Longitude (use with --lat)
 
 Format Options:
-  --format FORMAT       Output format: minimal, table, ascii, raw (default: minimal)
+  --format FORMAT       Output format: simple, visual, raw (default: simple)
   --units UNITS         Unit system: metric, imperial (default: metric)
 
 Data Source Options:
@@ -144,7 +137,7 @@ The tool uses a configuration file at `~/.weather.conf` (JSON format):
 ```json
 {
   "units": "metric",
-  "format": "minimal",
+  "format": "simple",
   "source": "open-meteo",
   "cache_duration": 300,
   "timeout": 10
@@ -178,9 +171,8 @@ weather-cli/
 │   │   └── nws.py           # National Weather Service
 │   ├── formatters/          # Output formatters
 │   │   ├── base.py          # Abstract formatter
-│   │   ├── minimal.py       # Minimal text output
-│   │   ├── table.py         # Table format
-│   │   ├── ascii.py         # ASCII art format
+│   │   ├── simple.py        # Simple text output
+│   │   ├── visual.py        # Visual ASCII art format
 │   │   └── raw.py           # Raw JSON output
 │   └── utils/               # Utility functions
 │       ├── http.py          # HTTP client wrapper
@@ -250,8 +242,8 @@ weather "90210"                           # ZIP code
 weather "35.6762,139.6503"                # Tokyo coordinates
 
 # Different formats and units
-weather "London" --format=ascii --units=imperial
-weather "Moscow" --format=table --units=metric
+weather "London" --format=visual --units=imperial
+weather "Moscow" --format=simple --units=metric
 weather "Sydney" --format=raw             # JSON output
 
 # Using explicit coordinates
