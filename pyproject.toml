@@ -3,16 +3,17 @@ requires = ["setuptools>=45", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "weather-cli"
+name = "cr-mb-weather-cli"
 version = "1.0.0"
-description = "A simple command-line weather tool with multiple data sources and output formats"
+description = "A fast, feature-rich command-line weather tool"
 readme = "README.md"
 license = {text = "MIT"}
 authors = [
-    {name = "Mike", email = "mike@example.com"}
+    {name = "Michael Barquero", email = "mike@mb.cr"}
 ]
 classifiers = [
-    "Development Status :: 4 - Beta",
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Console",
     "Intended Audience :: Developers",
     "Intended Audience :: End Users/Desktop",
     "License :: OSI Approved :: MIT License",
@@ -23,8 +24,8 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
-    "Topic :: Internet",
-    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Scientific/Engineering :: Atmospheric Science",
+    "Topic :: System :: Shells",
     "Topic :: Utilities",
 ]
 requires-python = ">=3.8"
