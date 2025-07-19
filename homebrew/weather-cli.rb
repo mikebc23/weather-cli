@@ -26,7 +26,7 @@ class WeatherCli < Formula
   test do
     # Test that the binary exists and shows help
     assert_match "Simple command-line weather tool", shell_output("#{bin}/weather --help")
-    
+
     # Test that it handles invalid input gracefully
     assert_match "Invalid date format", shell_output("#{bin}/weather --date invalid 2>&1", 1)
   end

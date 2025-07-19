@@ -12,7 +12,7 @@ weather "New York"
 ## Features
 
 - 🌍 Multiple location formats (city, coordinates, ZIP codes)
-- 📊 Multiple output formats (simple, visual ASCII art, raw JSON)  
+- 📊 Multiple output formats (simple, visual ASCII art, raw JSON)
 - 📅 Historical weather data and forecasts
 - ⏰ Hourly forecasts with visual timeline
 - 🌐 Multiple weather data sources (Open-Meteo)
@@ -22,11 +22,13 @@ weather "New York"
 ## Installation
 
 ### PyPI (Recommended)
+
 ```bash
 pip install weather-cli
 ```
 
 ### Homebrew (macOS)
+
 ```bash
 brew install weather-cli
 ```
@@ -37,7 +39,7 @@ brew install weather-cli
 # Current weather
 weather "Boston"
 
-# Tomorrow's forecast  
+# Tomorrow's forecast
 weather "Tokyo" --date tomorrow
 
 # Hourly forecast

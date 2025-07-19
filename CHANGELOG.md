@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.0.0] - 2025-07-18
 
 ### Added
+
 - Initial release of weather-cli
 - Support for current weather conditions
 - Multiple output formats: simple, visual, raw JSON
@@ -22,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Cross-platform support (macOS, Linux, Windows)
 
 ### Features
+
 - `weather "City"` - Current weather for any location
 - `weather --date tomorrow` - Tomorrow's forecast
 - `weather --hourly` - Hourly forecast timeline

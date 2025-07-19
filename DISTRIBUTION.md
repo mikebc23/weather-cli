@@ -5,6 +5,7 @@ This guide explains how to publish weather-cli to PyPI and Homebrew.
 ## 🎯 Quick Summary
 
 **For users to install:**
+
 ```bash
 # Option 1: PyPI (works everywhere)
 pip install weather-cli
@@ -18,23 +19,28 @@ Both will provide the `weather` command globally.
 ## 📦 Publishing to PyPI
 
 ### Prerequisites
+
 1. Create accounts:
    - [PyPI Account](https://pypi.org/account/register/)
    - [TestPyPI Account](https://test.pypi.org/account/register/) (for testing)
 
 2. Set up authentication:
+
    ```bash
    pip install twine
    # Configure ~/.pypirc with your credentials
    ```
 
 ### Build and Upload
+
 1. **Build the package:**
+
    ```bash
    ./scripts/build-pypi.sh
    ```
 
 2. **Test on TestPyPI first:**
+
    ```bash
    twine upload --repository testpypi dist/*
    pip install --index-url https://test.pypi.org/simple/ weather-cli
@@ -42,11 +48,13 @@ Both will provide the `weather` command globally.
    ```
 
 3. **Upload to PyPI:**
+
    ```bash
    twine upload dist/*
    ```
 
 4. **Verify installation:**
+
    ```bash
    pip install weather-cli
    weather "New York"  # Should work!
@@ -55,13 +63,16 @@ Both will provide the `weather` command globally.
 ## 🍺 Publishing to Homebrew
 
 ### Method 1: Homebrew Core (Official)
+
 1. **After PyPI is live**, create a PR to [homebrew-core](https://github.com/Homebrew/homebrew-core)
 2. Use our formula template in `homebrew/weather-cli.rb`
 3. Update the SHA256 hash after PyPI upload
 4. Follow [Homebrew's contribution guidelines](https://docs.brew.sh/Formula-Cookbook)
 
 ### Method 2: Custom Tap (Easier)
+
 1. **Create your own tap:**
+
    ```bash
    # Create a new repo: homebrew-tap
    git clone https://github.com/mikebc23/homebrew-tap
@@ -72,6 +83,7 @@ Both will provide the `weather` command globally.
    ```
 
 2. **Users install with:**
+
    ```bash
    brew tap mikebc23/tap
    brew install weather-cli
@@ -80,6 +92,7 @@ Both will provide the `weather` command globally.
 ## 🔍 Testing Your Distribution
 
 ### Test PyPI Package
+
 ```bash
 # Create fresh virtual environment
 python -m venv test-env
@@ -91,6 +104,7 @@ deactivate
 ```
 
 ### Test Homebrew Formula
+
 ```bash
 # Test locally first
 brew install --build-from-source homebrew/weather-cli.rb
@@ -115,7 +129,7 @@ Your users can now install with:
 # Python users
 pip install weather-cli
 
-# macOS users  
+# macOS users
 brew install weather-cli
 
 # Both get the same `weather` command

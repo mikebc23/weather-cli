@@ -16,9 +16,7 @@ requirements = []
 if requirements_file.exists():
     requirements = requirements_file.read_text(encoding="utf-8").strip().split("\n")
     requirements = [
-        req.strip()
-        for req in requirements
-        if req.strip() and not req.startswith("#")
+        req.strip() for req in requirements if req.strip() and not req.startswith("#")
     ]
 
 setup(
@@ -61,8 +59,7 @@ setup(
         ],
     },
     keywords=(
-        "weather cli command-line forecast meteorology "
-        "terminal hourly historical"
+        "weather cli command-line forecast meteorology " "terminal hourly historical"
     ),
     project_urls={
         "Bug Reports": "https://github.com/mikebc23/weather-cli/issues",
