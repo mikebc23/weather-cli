@@ -20,17 +20,21 @@ if requirements_file.exists():
     ]
 
 setup(
-    name="weather-cli",
+    name="cr-mb-weather-cli",
     version="1.0.0",
-    author="Mike",
-    author_email="mike@example.com",
-    description="A simple command-line weather tool with multiple data sources and output formats",
+    author="Michael Barquero",
+    author_email="mike@mb.cr",
+    description=(
+        "A fast, feature-rich command-line weather tool with multiple data "
+        "sources and output formats"
+    ),
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/mikebc23/weather-cli",
     packages=find_packages(),
     classifiers=[
-        "Development Status :: 4 - Beta",
+        "Development Status :: 5 - Production/Stable",
+        "Environment :: Console",
         "Intended Audience :: Developers",
         "Intended Audience :: End Users/Desktop",
         "License :: OSI Approved :: MIT License",
@@ -41,8 +45,10 @@ setup(
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: 3.12",
-        "Topic :: Internet",
+        "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
+        "Topic :: Scientific/Engineering :: Atmospheric Science",
         "Topic :: Software Development :: Libraries :: Python Modules",
+        "Topic :: System :: Shells",
         "Topic :: Utilities",
     ],
     python_requires=">=3.8",
@@ -52,9 +58,12 @@ setup(
             "weather=weather.main:main",
         ],
     },
-    keywords="weather cli command-line forecast meteorology",
+    keywords=(
+        "weather cli command-line forecast meteorology " "terminal hourly historical"
+    ),
     project_urls={
         "Bug Reports": "https://github.com/mikebc23/weather-cli/issues",
         "Source": "https://github.com/mikebc23/weather-cli",
+        "Documentation": "https://github.com/mikebc23/weather-cli#readme",
     },
 )
