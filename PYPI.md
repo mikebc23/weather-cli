@@ -5,7 +5,7 @@ A fast, feature-rich command-line weather tool with multiple data sources and ou
 ## Quick Start
 
 ```bash
-pip install weather-cli
+pip install cr-mb-weather-cli
 weather "New York"
 ```
 
@@ -24,7 +24,7 @@ weather "New York"
 ### PyPI (Recommended)
 
 ```bash
-pip install weather-cli
+pip install cr-mb-weather-cli
 ```
 
 ### Homebrew (macOS)

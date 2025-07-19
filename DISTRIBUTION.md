@@ -8,7 +8,7 @@ This guide explains how to publish weather-cli to PyPI and Homebrew.
 
 ```bash
 # Option 1: PyPI (works everywhere)
-pip install weather-cli
+pip install cr-mb-weather-cli
 
 # Option 2: Homebrew (macOS)
 brew install weather-cli
@@ -43,7 +43,7 @@ Both will provide the `weather` command globally.
 
    ```bash
    twine upload --repository testpypi dist/*
-   pip install --index-url https://test.pypi.org/simple/ weather-cli
+   pip install --index-url https://test.pypi.org/simple/ cr-mb-weather-cli
    weather --help  # Test it works
    ```
 
@@ -56,7 +56,7 @@ Both will provide the `weather` command globally.
 4. **Verify installation:**
 
    ```bash
-   pip install weather-cli
+   pip install cr-mb-weather-cli
    weather "New York"  # Should work!
    ```
 
@@ -97,7 +97,7 @@ Both will provide the `weather` command globally.
 # Create fresh virtual environment
 python -m venv test-env
 source test-env/bin/activate
-pip install weather-cli
+pip install cr-mb-weather-cli
 weather --help
 weather "London"
 deactivate
@@ -127,7 +127,7 @@ Your users can now install with:
 
 ```bash
 # Python users
-pip install weather-cli
+pip install cr-mb-weather-cli
 
 # macOS users
 brew install weather-cli
@@ -138,7 +138,7 @@ weather "Tokyo" --hourly --format visual
 
 ## 📊 Monitoring
 
-- **PyPI Downloads:** https://pypistats.org/packages/weather-cli
+- **PyPI Downloads:** https://pypistats.org/packages/cr-mb-weather-cli
 - **GitHub Stats:** Stars, forks, issues
 - **Homebrew Stats:** `brew info weather-cli`
 
